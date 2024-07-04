@@ -23,8 +23,128 @@
     <br>
     <button type="submit">submit</button>
   </form>
-  <p>                                                                                                  </p>
+  <br>
   <img src="ggo/prem.jpg" alt="ryan" width="200" >
+  <div class="container">
+    <h1>Dad Jokes Generator</h1>
+    <p id="joke">Click the button to generate a dad joke!</p>
+    <button id="generateJoke">Generate Joke</button>
+</div>
+
+<script>
+    const jokes = [
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "Why did the scarecrow win an award? He was outstanding in his field!",
+        "Why don't eggs tell jokes? They'd crack each other up!",
+        "What do you call a fake noodle? An impasta!",
+        "Why did the math book look so sad? Because it had too many problems!",
+        "What do you call a can opener that doesn't work? A can't opener!",
+        "Why did the cookie go to the doctor? Because it was feeling crumbly!",
+        "What do you call a bear with no teeth? A gummy bear!",
+        "Why don't skeletons fight each other? They don't have the guts!",
+        "What do you call a sleeping bull? A bulldozer!",
+        "What do you call cheese that isn't yours? Nacho cheese!",
+        "Why couldn't the pirate play cards? Because he was sitting on the deck!",
+        "What do you call a fish wearing a bowtie? Sofishticated!",
+        "How do you organize a space party? You planet!",
+        "Why don't eggs tell jokes? They'd crack each other up!",
+        "What do you call a parade of rabbits hopping backwards? A receding hare-line!",
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "How do you make a tissue dance? You put a little boogie in it!",
+        "Why did the gym close down? It just didn't work out!",
+        "What do you call a fake noodle? An impasta!",
+        "Why did the invisible man turn down the job offer? He couldn't see himself doing it!",
+        "What do you call a can opener that doesn't work? A can't opener!",
+        "Why don't skeletons fight each other? They don't have the guts!",
+        "What do you call a bear with no teeth? A gummy bear!",
+        "Why did the scarecrow win an award? He was outstanding in his field!",
+        "What do you call a dog magician? A labracadabrador!",
+        "Why did the math book look so sad? Because it had too many problems!",
+        "What do you call a factory that makes okay products? A satisfactory!",
+        "Why couldn't the bicycle stand up by itself? It was two tired!",
+        "What do you call a sleeping bull? A bulldozer!",
+        "How do you make a squid laugh? With ten-tickles!",
+        "Why don't eggs tell jokes? They'd crack each other up!",
+        "What do you call a can opener that doesn't work? A can't opener!",
+        "Why did the cookie go to the doctor? Because it was feeling crumbly!",
+        "What do you call a bear with no teeth? A gummy bear!",
+        "Why don't skeletons fight each other? They don't have the guts!",
+        "What do you call a fake noodle? An impasta!",
+        "Why did the math book look so sad? Because it had too many problems!",
+        "What do you call a sleeping bull? A bulldozer!",
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "How do you organize a space party? You planet!",
+        "What do you call cheese that isn't yours? Nacho cheese!",
+        "Why couldn't the pirate play cards? Because he was sitting on the deck!",
+        "What do you call a fish wearing a bowtie? Sofishticated!",
+        "How do you make a tissue dance? You put a little boogie in it!",
+        "Why did the gym close down? It just didn't work out!",
+        "What do you call a parade of rabbits hopping backwards? A receding hare-line!",
+        "Why did the invisible man turn down the job offer? He couldn't see himself doing it!",
+        "What do you call a dog magician? A labracadabrador!",
+        "What do you call a factory that makes okay products? A satisfactory!",
+        "Why couldn't the bicycle stand up by itself? It was two tired!",
+        "How do you make a squid laugh? With ten-tickles!",
+        "What do you call a belt made out of watches? A waist of time!",
+        "Why don't eggs tell jokes? They'd crack each other up!",
+        "What do you call a pile of cats? A meowtain!",
+        "Why did the scarecrow become a successful motivational speaker? He was outstanding in his field!",
+        "What do you call a fake noodle? An impasta!",
+        "Why did the math book look so sad? Because it had too many problems!",
+        "What do you call a can opener that doesn't work? A can't opener!",
+        "Why did the cookie go to the doctor? Because it was feeling crumbly!",
+        "What do you call a bear with no teeth? A gummy bear!",
+        "Why don't skeletons fight each other? They don't have the guts!",
+        "What do you call a sleeping bull? A bulldozer!",
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "How do you organize a space party? You planet!",
+        "What do you call cheese that isn't yours? Nacho cheese!",
+        "Why couldn't the pirate play cards? Because he was sitting on the deck!",
+        "What do you call a fish wearing a bowtie? Sofishticated!",
+        "How do you make a tissue dance? You put a little boogie in it!",
+        "Why did the gym close down? It just didn't work out!",
+        "What do you call a parade of rabbits hopping backwards? A receding hare-line!",
+        "Why did the invisible man turn down the job offer? He couldn't see himself doing it!",
+        "What do you call a dog magician? A labracadabrador!",
+        "What do you call a factory that makes okay products? A satisfactory!",
+        "Why couldn't the bicycle stand up by itself? It was two tired!",
+        "How do you make a squid laugh? With ten-tickles!",
+        "What do you call a belt made out of watches? A waist of time!",
+        "Why don't eggs tell jokes? They'd crack each other up!",
+        "What do you call a pile of cats? A meowtain!",
+        "Why did the scarecrow become a successful motivational speaker? He was outstanding in his field!",
+        "What do you call a fake noodle? An impasta!",
+        "Why did the math book look so sad? Because it had too many problems!",
+        "What do you call a can opener that doesn't work? A can't opener!",
+        "Why did the cookie go to the doctor? Because it was feeling crumbly!",
+        "What do you call a bear with no teeth? A gummy bear!",
+        "Why don't skeletons fight each other? They don't have the guts!",
+        "What do you call a sleeping bull? A bulldozer!",
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "How do you organize a space party? You planet!",
+        "What do you call cheese that isn't yours? Nacho cheese!",
+        "Why couldn't the pirate play cards? Because he was sitting on the deck!",
+        "What do you call a fish wearing a bowtie? Sofishticated!",
+        "How do you make a tissue dance? You put a little boogie in it!",
+        "Why did the gym close down? It just didn't work out!",
+        "What do you call a parade of rabbits hopping backwards? A receding hare-line!",
+        "Why did the invisible man turn down the job offer? He couldn't see himself doing it!",
+        "What do you call a dog magician? A labracadabrador!",
+        "What do you call a factory that makes okay products? A satisfactory!",
+        "Why couldn't the bicycle stand up by itself? It was two tired!",
+        "How do you make a squid laugh? With ten-tickles!"
+    ];
+
+    const jokeElement = document.getElementById('joke');
+    const generateButton = document.getElementById('generateJoke');
+
+    function generateJoke() {
+        const randomIndex = Math.floor(Math.random() * jokes.length);
+        jokeElement.textContent = jokes[randomIndex];
+    }
+
+    generateButton.addEventListener('click', generateJoke);
+</script>
 </body>
 
 </html>
