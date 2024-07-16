@@ -147,6 +147,143 @@
 
     generateButton.addEventListener('click', generateJoke);
 </script>
+import pygame
+import random
+import noise
+
+# Initialize Pygame
+pygame.init()
+
+# Set up the display
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Minecraft-like Game")
+
+# Colors
+SKY_BLUE = (135, 206, 235)
+GREEN = (0, 255, 0)
+BROWN = (139, 69, 19)
+GRAY = (128, 128, 128)
+SAND_COLOR = (194, 178, 128)
+STONE_COLOR = (169, 169, 169)
+WATER_COLOR = (64, 164, 223)
+
+# Block size
+BLOCK_SIZE = 20
+
+# Block types
+AIR = 0
+GRASS = 1
+DIRT = 2
+TREE_TRUNK = 3
+TREE_LEAVES = 4
+STONE = 5
+SAND = 6
+WATER = 7
+
+# Generate terrain
+def generate_terrain(width, height):
+    terrain = []
+    for x in range(width):
+        column = []
+        for y in range(height):
+            # Use Perlin noise for more natural terrain
+            n = noise.pnoise2(x/50, y/50, octaves=3, persistence=0.5, lacunarity=2.0, repeatx=1024, repeaty=1024, base=42)
+            if y < height * 0.3 + n * 20:
+                column.append(AIR)
+            elif y < height * 0.35 + n * 20:
+                column.append(GRASS)
+            elif y < height * 0.4 + n * 20:
+                column.append(DIRT)
+            elif y < height * 0.6 + n * 20:
+                column.append(STONE)
+            else:
+                column.append(SAND)
+        
+        # Add water at the bottom
+        for y in range(len(column)-1, int(height * 0.7), -1):
+            column[y] = WATER
+        
+        terrain.append(column)
+    return terrain
+
+# Generate trees
+def generate_trees(terrain, num_trees):
+    for _ in range(num_trees):
+        x = random.randint(0, len(terrain) - 1)
+        y = 0
+        while y < len(terrain[0]) - 1 and terrain[x][y] == AIR:
+            y += 1
+        if y > 0 and terrain[x][y] == GRASS:
+            y -= 1
+            terrain[x][y] = TREE_TRUNK
+            if y > 1:
+                terrain[x][y-1] = TREE_LEAVES
+                terrain[x-1][y-1] = TREE_LEAVES
+                terrain[x+1][y-1] = TREE_LEAVES
+                terrain[x][y-2] = TREE_LEAVES
+
+# Main game loop
+def game_loop():
+    clock = pygame.time.Clock()
+    terrain = generate_terrain(WIDTH // BLOCK_SIZE, HEIGHT // BLOCK_SIZE)
+    generate_trees(terrain, 10)
+    
+    player_x, player_y = WIDTH // 2, 0
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                block_x, block_y = x // BLOCK_SIZE, y // BLOCK_SIZE
+                if event.button == 1:  # Left click (break block)
+                    terrain[block_x][block_y] = AIR
+                elif event.button == 3:  # Right click (place block)
+                    terrain[block_x][block_y] = DIRT
+        
+        # Move player
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            player_x -= 2
+        if keys[pygame.K_RIGHT]:
+            player_x += 2
+        if keys[pygame.K_UP]:
+            player_y -= 2
+        if keys[pygame.K_DOWN]:
+            player_y += 2
+        
+        # Draw everything
+        screen.fill(SKY_BLUE)
+        for x in range(len(terrain)):
+            for y in range(len(terrain[0])):
+                if terrain[x][y] == GRASS:
+                    pygame.draw.rect(screen, GREEN, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                elif terrain[x][y] == DIRT:
+                    pygame.draw.rect(screen, BROWN, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                elif terrain[x][y] == TREE_TRUNK:
+                    pygame.draw.rect(screen, BROWN, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                elif terrain[x][y] == TREE_LEAVES:
+                    pygame.draw.rect(screen, GREEN, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                elif terrain[x][y] == STONE:
+                    pygame.draw.rect(screen, STONE_COLOR, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                elif terrain[x][y] == SAND:
+                    pygame.draw.rect(screen, SAND_COLOR, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                elif terrain[x][y] == WATER:
+                    pygame.draw.rect(screen, WATER_COLOR, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+        
+        # Draw player
+        pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, BLOCK_SIZE, BLOCK_SIZE))
+        
+        pygame.display.flip()
+        clock.tick(60)
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    game_loop()
 </body>
 
 </html>
